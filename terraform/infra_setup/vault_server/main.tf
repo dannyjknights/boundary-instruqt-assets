@@ -7,12 +7,13 @@ terraform {
     aws = {
       source = "hashicorp/aws"
     }
-     vault = {
-      source = "hashicorp/vault"
-      version = ">=3.23.0"
-    }
+    # vault = {
+    #   source  = "hashicorp/vault"
+    #   version = ">=3.23.0"
+    # }
   }
 }
+
 
 locals {
   vault_server_config      = <<-VAULT_CONFIG
@@ -242,45 +243,44 @@ data "cloudinit_config" "vault_server" {
   }
 }
 
-resource "vault_policy" "boundary_controller_policy" {
-  name   = "boundary-controller"
-  policy = <<EOT
-path "auth/token/lookup-self" {
-  capabilities = ["read"]
-}
+# resource "vault_policy" "boundary_controller_policy" {
+#   name   = "boundary-controller"
+#   policy = <<EOT
+# path "auth/token/lookup-self" {
+#   capabilities = ["read"]
+# }
 
-path "auth/token/renew-self" {
-  capabilities = ["update"]
-}
+# path "auth/token/renew-self" {
+#   capabilities = ["update"]
+# }
 
-path "auth/token/revoke-self" {
-  capabilities = ["update"]
-}
+# path "auth/token/revoke-self" {
+#   capabilities = ["update"]
+# }
 
-path "sys/leases/renew" {
-  capabilities = ["update"]
-}
+# path "sys/leases/renew" {
+#   capabilities = ["update"]
+# }
 
-path "sys/leases/revoke" {
-  capabilities = ["update"]
-}
+# path "sys/leases/revoke" {
+#   capabilities = ["update"]
+# }
 
-path "sys/capabilities-self" {
-  capabilities = ["update"]
-}
-EOT
-}
+# path "sys/capabilities-self" {
+#   capabilities = ["update"]
+# }
+# EOT
+# }
 
-resource "vault_policy" "postgress_read" {
-  name = "postgress-read"
-  policy = <<EOT
-  path "postgres/creds/* {
-    capabilities = ["read"]
-  }
-  EOT
-}
-  
-}
+# resource "vault_policy" "postgress_read" {
+#   name   = "postgress-read"
+#   policy = <<EOT
+#   path "postgres/creds/* {
+#     capabilities = ["read"]
+#   }
+#   EOT
+# }
+
 
 resource "aws_instance" "vault_server" {
   associate_public_ip_address = false
