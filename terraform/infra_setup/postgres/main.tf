@@ -10,8 +10,8 @@ locals {
   cloudinit_config_postgres = {
     write_files = [
       {
-        //content     = file("${path.root}/files/gpg_pubkeys/hashicorp-archive-keyring.gpg")
-        content     = file("../files/gpg_pubkeys/hashicorp-archive-keyring.gpg")
+        content     = file("${path.root}/files/gpg_pubkeys/hashicorp-archive-keyring.gpg")
+        //content     = file("../files/gpg_pubkeys/hashicorp-archive-keyring.gpg")
         owner       = "root:root"
         path        = "/tmp/hashicorp-archive-keyring.gpg"
         permissions = "0644"
