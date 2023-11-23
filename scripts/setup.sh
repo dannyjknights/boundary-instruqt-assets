@@ -11,7 +11,7 @@ export TF_BASE=""
 export TF_VAR_unique_name=""
 export TF_VAR_boundary_cluster_admin_url=""
 export TF_VAR_create_postgres=true
-#export TF_VAR_create_k8s=true
+export TF_VAR_create_k8s=true
 export TF_VAR_admin_ip_additional=""
 
 if [[ -f ~/.${INSTRUQT_PARTICIPANT_ID}-env.sh ]]; then
@@ -134,69 +134,69 @@ while [ $boundary_cluster_info_success != "true" ]; do
   fi
 done
 
-# #Ideally want to remove this as an option and just deploy the track
-# echo "$default_setup_info_text"
-# echo ""
-# read -p "Do you want to accept the default track setup (default: yes)? " defaults_answer
-# if echo $defaults_answer | grep -E -i '^n$|^no$' > /dev/null; then
-#   echo "$target_k8s_info_text"
-#   echo ""
-#   read -p "Do you want to create the Kubernetes cluster as described (default: yes)? " k8s_answer
-#   if echo $k8s_answer | grep -E -i '^n$|^no$' ; then
-#     TF_VAR_create_k8s=false
-#   fi
-#   echo "$target_db_info_text"
-#   echo ""
-#   read -p "Do you want to create the Postgres instance as described (default: yes)? " db_answer
-#   if echo $db_answer | grep -E -i '^n$|^no$' ; then
-#     TF_VAR_create_postgres=false
-#   fi
-# fi
+#Ideally want to remove this as an option and just deploy the track
+echo "$default_setup_info_text"
+echo ""
+read -p "Do you want to accept the default track setup (default: yes)? " defaults_answer
+if echo $defaults_answer | grep -E -i '^n$|^no$' > /dev/null; then
+  echo "$target_k8s_info_text"
+  echo ""
+  read -p "Do you want to create the Kubernetes cluster as described (default: yes)? " k8s_answer
+  if echo $k8s_answer | grep -E -i '^n$|^no$' ; then
+    TF_VAR_create_k8s=false
+  fi
+  echo "$target_db_info_text"
+  echo ""
+  read -p "Do you want to create the Postgres instance as described (default: yes)? " db_answer
+  if echo $db_answer | grep -E -i '^n$|^no$' ; then
+    TF_VAR_create_postgres=false
+  fi
+fi
 
-# if [[ -z "$TF_VAR_admin_ip_additional" ]]; then
-#   echo "$admin_ip_info_text"
-#   echo ""
-#   read -p "(optional) Additional IP to allow connections from (Enter to skip): " admin_ip_additional
-#   if [[ ! -z "$admin_ip_additional" ]] ; then
-#     if [[ ! "$admin_ip_additional" =~ /[0-9]{1,2}$ ]] ; then
-#       TF_VAR_admin_ip_additional="${admin_ip_additional}/32"
-#     else
-#       TF_VAR_admin_ip_additional="$admin_ip_additional"
-#     fi
-#   else
-#     TF_VAR_admin_ip_additional=""
-#   fi
-# else
-#   echo "Re-using previously-provided admin IP: $TF_VAR_admin_ip_additional"
-# fi
+if [[ -z "$TF_VAR_admin_ip_additional" ]]; then
+  echo "$admin_ip_info_text"
+  echo ""
+  read -p "(optional) Additional IP to allow connections from (Enter to skip): " admin_ip_additional
+  if [[ ! -z "$admin_ip_additional" ]] ; then
+    if [[ ! "$admin_ip_additional" =~ /[0-9]{1,2}$ ]] ; then
+      TF_VAR_admin_ip_additional="${admin_ip_additional}/32"
+    else
+      TF_VAR_admin_ip_additional="$admin_ip_additional"
+    fi
+  else
+    TF_VAR_admin_ip_additional=""
+  fi
+else
+  echo "Re-using previously-provided admin IP: $TF_VAR_admin_ip_additional"
+fi
 
 
-# export TF_VAR_admin_ip_additional
-# if ! grep "export TF_VAR_admin_ip_additional=\"$TF_VAR_admin_ip_additional\"" ~/.${INSTRUQT_PARTICIPANT_ID}-env.sh >/dev/null 2>&1; then
-#   echo "export TF_VAR_admin_ip_additional=\"$TF_VAR_admin_ip_additional\"" >> ~/.${INSTRUQT_PARTICIPANT_ID}-env.sh
-# fi
+export TF_VAR_admin_ip_additional
+if ! grep "export TF_VAR_admin_ip_additional=\"$TF_VAR_admin_ip_additional\"" ~/.${INSTRUQT_PARTICIPANT_ID}-env.sh >/dev/null 2>&1; then
+  echo "export TF_VAR_admin_ip_additional=\"$TF_VAR_admin_ip_additional\"" >> ~/.${INSTRUQT_PARTICIPANT_ID}-env.sh
+fi
 
-# if [[ $TF_VAR_create_k8s || $TF_VAR_create_postgres || $create_boundary ]]; then
-#   echo ""
-# fi
+if [[ $TF_VAR_create_k8s || $TF_VAR_create_postgres || $create_boundary ]]; then
+  echo ""
+fi
 
-# if $create_boundary ; then
-#   echo "Will create the Boundary cluster."
-# fi
+if $create_boundary ; then
+  echo "Will create the Boundary cluster."
+fi
 
-# if $TF_VAR_create_k8s ; then
-#   echo "Will create the Kubernetes cluster."
-# fi
+if $TF_VAR_create_k8s ; then
+  echo "Will create the Kubernetes cluster."
+fi
 
-# if $TF_VAR_create_postgres ; then
-#   echo "Will create the Postgres database instance."
-# fi
+if $TF_VAR_create_postgres ; then
+  echo "Will create the Postgres database instance."
+fi
 
-# if [[ ! -z "$TF_VAR_admin_ip_additional" ]] ; then
-#   echo ""
-#   echo "Will allow access to this IP: $TF_VAR_admin_ip_additional"
-# fi
-# #end of block to remove
+if [[ ! -z "$TF_VAR_admin_ip_additional" ]] ; then
+  echo ""
+  echo "Will allow access to this IP: $TF_VAR_admin_ip_additional"
+fi
+#end of block to remove
 
 read -p "If everything above looks correct, press Enter to deploy the infrastructure." wait_for_ok
 
