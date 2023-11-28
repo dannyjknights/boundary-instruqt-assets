@@ -95,9 +95,10 @@ locals {
         permissions = "0644"
       },
       {
-        content     = local.boundary_worker_unit_dropin
-        owner       = "root:root"
-        path        = "/etc/systemd/system/boundary.service.d/10-execstart.conf"
+        content = local.boundary_worker_unit_dropin
+        owner   = "root:root"
+        //path        = "/etc/systemd/system/boundary.service.d/10-execstart.conf"
+        path        = "/usr/lib/systemd/system/boundary.service/boundary.service"
         permissions = "0644"
       },
       {
